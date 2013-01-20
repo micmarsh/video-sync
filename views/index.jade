@@ -3,6 +3,7 @@ extends layout
 block content
   h1= title
   p Welcome to video-sync!
-  button(id="button", onclick="alert('poo')") wooo
+  video(src="http://media.w3.org/2010/05/sintel/trailer.ogv", id="video", controls) Your browser doesn't support the video element
+
   script(src="/socket.io/socket.io.js")
   script(src="/javascripts/client.js")
