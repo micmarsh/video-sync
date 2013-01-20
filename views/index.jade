@@ -2,8 +2,11 @@ extends layout
 
 block content
   h1= title
-  p Welcome to video-sync!
   video(src="http://media.w3.org/2010/05/sintel/trailer.ogv", id="video", controls) Your browser doesn't support the video element
+  p Don't like this^ shit? Upload a new one, mothufuckuh!:
+  form(action="upload", method="post", enctype="multipart/form-data")
+    input(type="file", name="uploadVideo")
+    input(type="submit")
 
   script(src="/socket.io/socket.io.js")
   script(src="/javascripts/client.js")
