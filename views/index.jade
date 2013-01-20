@@ -2,4 +2,7 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to video-sync!
+  button(id="button", onclick="alert('poo')") wooo
+  script(src="/socket.io/socket.io.js")
+  script(src="/javascripts/client.js")
