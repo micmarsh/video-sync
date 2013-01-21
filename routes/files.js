@@ -6,13 +6,13 @@ exports.upload = function(req, res) {
     var file = req.files.uploadVideo
       , fs = require('fs')
       , name = file.path.slice(5)
-      , newPath = __dirname + "/uploads/" + name + '.ogg' ;
-
-    convert(file.path, newPath, function (err, info) {
+      , dest = '/videos/' + name + '.ogg'
+      , encodeTo = './public' + dest;
+    console.log('omg about to convert video');
+    convert(file.path, encodeTo, function (err, info) {
         console.log(err);
-
         res.render('video', {
-            path: newPath,
+            path: dest,
             title: 'Le Video'
         });
     });

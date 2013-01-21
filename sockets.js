@@ -4,7 +4,7 @@ exports.socketSetup = (function(){
     var connections = {}
     var connectionsArray = function(connObject){
       return Object.keys(connObject).map(function (key){
-        connObject[key];
+        return connObject[key];
       })
     }
 
