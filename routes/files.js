@@ -1,23 +1,20 @@
-var convert = function (success) {
-
+var convert = function (title, dest, callback) {
+    require('ffmpeg-node').exec(['-i', title, dest ], callback);
 };
 
 exports.upload = function(req, res) {
-    var file = req.files.uploadVideo;
-    var fs = require('fs');
-    console.log(file);
-    fs.readFile(file.path, function (err, data) {
-        //check file type first!
-        var name = file.path.slice(5)
-          , newPath = __dirname + "/uploads/" + name;
+    var file = req.files.uploadVideo
+      , fs = require('fs')
+      , name = file.path.slice(5)
+      , newPath = __dirname + "/uploads/" + name + '.ogg' ;
 
-        fs.writeFile(newPath, data, function (err) {
-            if(err) throw err;
+    convert(file.path, newPath, function (err, info) {
+        console.log(err);
 
-            res.render('video', {
-                path: newPath,
-                title: 'Le Video'
-            });
-        })
+        res.render('video', {
+            path: newPath,
+            title: 'Le Video'
+        });
     });
+
 }
