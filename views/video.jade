@@ -2,8 +2,10 @@ extends layout
 
 block content
     h1= title
-    video(src= path, id="video", controls) Your browser doesn't support the video element
+    video(id="video", controls)
+        source(src=path, type="video/webm")
+        p Your browser doesn't support the video element
 
     script(src="/socket.io/socket.io.js")
-    script(src="/javascripts/client.js")
+    script(src="/javascripts/videosockets.js")
 
