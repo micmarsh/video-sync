@@ -11,7 +11,7 @@ utils.getName = function(str) {
 }
 
 utils.makeVideoPath = function(vars, fileName) {
-  return vars.domain + vars.bucketName + '/' + fileName + '.webm';
+  return vars.domain + vars.bucketName + '/' + fileName;
 }
 
 utils.convert = function (title, dest, renderView) {
@@ -34,7 +34,7 @@ utils.convert = function (title, dest, renderView) {
           ACL: 'public-read'
         },function success(res){
           renderView(ffmpegErr, ffmpegInfo, {
-            path: utils.makeVideoPath(globalVars, fileName);
+            name: fileName
           });
         });
       });
@@ -62,10 +62,10 @@ exports.upload = function(req, res) {
 
     console.log('omg about to convert video');
     utils.convert(file.path, dest, function renderFinalVideo(err, info, options) {
-        var path = options.path;
+        var fileName = options.name;
 
         console.log(err);
-        res.redirect('/'+path);
+        res.redirect('/'+fileName);
     });
 
 };
@@ -74,7 +74,7 @@ exports.serve = function(req, res) {
     var id = req.params.id;
 
     res.render('video', {
-        path: util.makeVideoPath(globalVars, id);
+        path: utils.makeVideoPath(globalVars, id),
         title: 'Le Video'
     });
 
