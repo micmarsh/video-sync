@@ -14,6 +14,7 @@ var express = require('express')
 var app = express();
 AWS.config.loadFromPath('./aws.json');
 files.initAWS(AWS);
+files.dickAround();
 
 require('./configure.js').configure(app, express, path);
 
