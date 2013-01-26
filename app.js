@@ -7,7 +7,10 @@ var express = require('express')
   , routes = require('./routes')
   , files = require('./routes/files')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , AWS = require('aws-sdk');
+
+console.log(AWS);
 
 var app = express();
 

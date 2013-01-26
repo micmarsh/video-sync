@@ -9,7 +9,8 @@
     "express": "3.0.0rc4",
     "jade": "*",
     "socket.io": "*",
-    "ffmpeg-node": "*"
+    "ffmpeg-node": "*",
+    "aws-sdk": "*"
   },
   "subdomain": "micmarsh.video-sync",
   "engines": {
