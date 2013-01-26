@@ -15,6 +15,7 @@ require('./configure.js').configure(app, express, path);
 
 app.get('/', routes.index);
 app.post('/upload', files.upload);
+app.get('/:id', files.serve);
 
 var server = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

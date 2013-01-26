@@ -8,13 +8,21 @@ exports.upload = function(req, res) {
       , name = file.path.slice(5)
       , dest = '/videos/' + name + '.webm'
       , encodeTo = './public' + dest;
+
     console.log('omg about to convert video');
     convert(file.path, encodeTo, function (err, info) {
         console.log(err);
-        res.render('video', {
-            path: dest,
-            title: 'Le Video'
-        });
+        res.redirect('/'+name);
     });
 
-}
+};
+
+exports.serve = function(req, res) {
+    var id = req.params.id;
+
+    res.render('video', {
+        path: '/videos/'+ id + '.webm',
+        title: 'Le Video'
+    });
+
+};
