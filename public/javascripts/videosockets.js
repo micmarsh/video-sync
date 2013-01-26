@@ -1,6 +1,12 @@
 (function () {
-    var DOMAIN = 'http://localhost:3000';
-    var socket = io.connect(DOMAIN);
+    var url = {
+        origin: window.location.origin,
+        pathname: window.location.pathname
+    };
+
+    var socket = io.connect(url.origin, {
+        client: url.pathname
+    });
     var video = document.getElementById('video');
 
     socket.on('clientEvent', function (data) {

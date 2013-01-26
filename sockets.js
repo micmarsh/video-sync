@@ -8,9 +8,18 @@ exports.socketSetup = (function(){
       })
     }
 
+
     return function (io) {
+        //for heroku!
+        io.configure(function () {
+          io.set("transports", ["xhr-polling"]);
+          io.set("polling duration", 10);
+        });
+
         io.sockets.on('connection', function (socket) {
           var id = socket.id;
+
+          console.log(socket);
 
           socket.on('stateChange', function (data) {
             console.log(data);
