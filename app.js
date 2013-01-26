@@ -12,7 +12,7 @@ var express = require('express')
 
 
 var app = express();
-//AWS.config.loadFromPath('./aws.json');
+AWS.config.loadFromPath('./aws.json');
 files.initAWS(AWS);
 files.dickAround();
 

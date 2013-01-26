@@ -3,7 +3,12 @@ var globalVars = {};
 globalVars.S3 = null;
 globalVars.domain = null;
 globalVars.bucketName = "monkeyCatVideoSync";
-globalVars.codecFlags = ['-vcodec', 'libvpx', '-acodec', 'libvorbis'];
+globalVars.codecFlags = [];//['-vcodec', 'libvpx', '-acodec', 'libvorbis'];
+
+exports.initAWS = function(aws) {
+  globalVars.S3 = new aws.S3();
+  globalVars.domain = globalVars.S3.client.endpoint.href;
+};
 
 var utils = {};
 
@@ -51,11 +56,6 @@ utils.convert = function (title, dest, renderView) {
     });
 };
 
-exports.initAWS = function(aws) {
-  globalVars.S3 = new aws.S3();
-  globalVars.domain = globalVars.S3.client.endpoint.href;
-};
-
 exports.dickAround = function(args) {
     console.log(globalVars.S3);
     globalVars.S3.client.createBucket({Bucket: globalVars.bucketName}, function(err, data) {
@@ -68,7 +68,7 @@ exports.dickAround = function(args) {
 exports.upload = function(req, res) {
     var file = req.files.uploadVideo
       , name = utils.getName(file.path)
-      , dest = '/tmp/' + name + '.webm';
+      , dest = '/tmp/' + name + '.mp4';
 
     console.log('omg about to convert video');
     utils.convert(file.path, dest, function renderFinalVideo(err, info, options) {
