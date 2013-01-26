@@ -10,9 +10,10 @@ var express = require('express')
   , path = require('path')
   , AWS = require('aws-sdk');
 
-console.log(AWS);
 
 var app = express();
+AWS.config.loadFromPath('./aws.json');
+files.initAWS(AWS);
 
 require('./configure.js').configure(app, express, path);
 

@@ -2,6 +2,20 @@ var convert = function (title, dest, callback) {
     require('ffmpeg-node').exec(['-i', title, dest ], callback);
 };
 
+var S3 = null;
+
+exports.initAWS = function(aws) {
+  S3 = new aws.S3();
+};
+
+exports.dickAround = function(args) {
+  S3.createBucket({Bucket: 'videos'}, function(err, data) {
+    console.log(err);
+    console.log('yay a bucket:');
+    console.log(data);
+  })
+};
+
 exports.upload = function(req, res) {
     var file = req.files.uploadVideo
       , fs = require('fs')
