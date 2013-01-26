@@ -19,8 +19,6 @@ exports.socketSetup = (function(){
         io.sockets.on('connection', function (socket) {
           var id = socket.id;
 
-          console.log(socket);
-
           socket.on('stateChange', function (data) {
             console.log(data);
             var array = connectionsArray(connections);
