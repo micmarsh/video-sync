@@ -12,9 +12,12 @@ var express = require('express')
 
 
 var app = express();
-AWS.config.loadFromPath('./aws.json');
+try{
+    AWS.config.loadFromPath('./aws.json');
+}catch(e){
+    console.log('loading aws credentials from environment variables');
+}
 files.initAWS(AWS);
-files.dickAround();
 
 require('./configure.js').configure(app, express, path);
 
