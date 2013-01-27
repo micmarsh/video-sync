@@ -12,6 +12,8 @@ exports.initAWS = function(aws) {
 
 var utils = {};
 
+utils.remove
+
 utils.getName = function(str) {
   return str.slice(5,12);//removes '/tmp/' and shrinks name to 7 characters
 }
@@ -25,35 +27,39 @@ utils.ffmpegArray = function(io, codecs) {
   return io.slice(0,2).concat(codecs).concat(io.slice(2));
 }
 
-utils.convert = function (title, dest, renderView) {
-    //needs to:
-    //1. convert video, store it somewhere in tmp (look up heroku filesystem)
-    //2. read the file, upload it to amazon.
-    //3. Call the the callback that was originaly passed into here
-    var fs = require('fs');
-    var args = utils.ffmpegArray(['-i', title, dest ], globalVars.codecFlags);
+utils.convert = function (path, dest, renderView) {
+    var extensions = ['.mp4', '.ogg', '.webm']
+      , fs = require('fs')
+      , ffmpeg = require('ffmpeg-node');
 
-    console.log(args);
+    (function convertAll(exts) {
+      if (exts.length) {
+        extension = exts[0];
+        var title = dest + extension
+          , args = utils.ffmpegArray(['-i', path, title ], globalVars.codecFlags);
 
-    require('ffmpeg-node').exec(args, function uploadToAmazon(ffmpegErr, ffmpegInfo) {
-        fs.readFile(dest, function sendToS3(err, data) {
-          var s3 = globalVars.S3
-            , bucketName = globalVars.bucketName
-            , fileName = utils.getName(dest);
-          console.log('done converting video:');
-          console.log(data);
-          s3.client.putObject({
-            Bucket: bucketName,
-            Key: fileName,
-            Body: data,
-            ACL: 'public-read'
-          },function success(res){
-            renderView(ffmpegErr, ffmpegInfo, {
-              name: fileName
+        ffmpeg.exec(args, function readAndUpload(ffmpegErr, ffmpegInfo) {
+          fs.readFile(title, function sendToS3(err, data) {
+            var s3 = globalVars.S3
+              , bucketName = globalVars.bucketName
+              , fileName = utils.getName(dest) + extension;
+
+            console.log('done converting video:');
+            console.log(data);
+            s3.client.putObject({
+              Bucket: bucketName,
+              Key: fileName,
+              Body: data,
+              ACL: 'public-read'
+            },function success(res){
+              convertAll(exts.slice(1));
             });
           });
         });
-    });
+      }else {
+        renderView(utils.getName(dest));
+      }
+    }(extensions));
 };
 
 exports.dickAround = function(args) {
@@ -68,13 +74,10 @@ exports.dickAround = function(args) {
 exports.upload = function(req, res) {
     var file = req.files.uploadVideo
       , name = utils.getName(file.path)
-      , dest = '/tmp/' + name + '.mp4';
+      , dest = '/tmp/' + name;
 
     console.log('omg about to convert video');
-    utils.convert(file.path, dest, function renderFinalVideo(err, info, options) {
-        var fileName = options.name;
-
-        console.log(err);
+    utils.convert(file.path, dest, function renderFinalVideo(fileName) {
         res.redirect('/'+fileName);
     });
 
