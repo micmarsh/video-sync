@@ -1,4 +1,3 @@
 video-sync
 ==========
-
-Watch videos simultaneously with other users
+Basically inactive, have created and am working on much better versions
